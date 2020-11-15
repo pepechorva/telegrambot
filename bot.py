@@ -14,12 +14,15 @@ import requests
 import datetime  # Importing the datetime library
 import telepot   # Importing the telepot library
 from telepot.loop import MessageLoop  # Library function to communicate with telegram bot
-#import RPi.GPIO as GPIO  # Importing the GPIO library to use the GPIO pins of Raspberry pi
 from time import sleep    # Importing the time library to provide the delays in program
 
 # Insert your telegram token below
 TOKEN = 'TOKEN'
 MYGROUP = 00000000
+BOTNAME = 'botname'
+
+
+
 urls = {
  "/lodije":"http://i.giphy.com/13IC4LVeP5NGNi.gif",
  "/zasca":"https://media.giphy.com/media/JrMgGbXmucW6ccgave/giphy.gif",
@@ -52,9 +55,8 @@ def handle(msg):
 	command = msg['text']   # Getting text from the message
 	now = datetime.datetime.now() # Getting date and time
 	print ('Received: ', command, " in ", chat_id)
-	#print(command)
 	command2 = command
-	if "@xorvabot" in command:
+	if "@"+BOTNAME in command:
 		aux = command.split('@', 1 )
 		command = aux[0]
 	# Comparing the incoming message to send a reply according to it
