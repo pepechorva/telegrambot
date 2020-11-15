@@ -55,26 +55,25 @@ def handle(msg):
 	command = msg['text']   # Getting text from the message
 	now = datetime.datetime.now() # Getting date and time
 	print ('Received: ', command, " in ", chat_id)
-	command2 = command
 	if "@"+BOTNAME in command:
 		aux = command.split('@', 1 )
-		command = aux[0]
+		command = aux[0].lower()
 	# Comparing the incoming message to send a reply according to it
 	if command in urls.keys():
 		bot.sendDocument(chat_id, urls[command])
 	elif command in messages.keys():
 		bot.sendMessage(chat_id, str(messages[command]))
-	elif command == '/List' or command == '/list':
+	elif command == '/list':
 		lista = ["/List"]
 		lista.extend(list(messages.keys()))
 		lista.extend(list(urls.keys()))
 		bot.sendMessage(chat_id, str(lista))
-	elif command == '/ip' or command == '/IP':
+	elif command == '/ip':
 		ip = urllib.request.urlopen('https://api.ipify.org').read() # esta URL puede ser reemplazada con otra que preste similar servicio
-		bot.sendMessage(MYGROUP, str(ip, 'utf-8'))
+		bot.sendMessage(MYGROUP, str(ip, 'utf-8')) #el bot envia por mensaje privado la IP pública de donde está alojado
 bot = telepot.Bot(TOKEN)
 bot.deleteWebhook()
-print (bot.getMe())
+print (bot.getMe()) #para obtener mi ID de telegram (usar solo en consola, no automatizar!!)
 
 # Start listening to the telegram bot and whenever a message is  received, the handle function will be called.
 MessageLoop(bot, handle).run_as_thread()
