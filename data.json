@@ -1,0 +1,72 @@
+
+{
+	"commands":[
+
+{
+    	"command": "/hi",
+        "typeSend": "sendMessage",
+		"response": "Jelouuu!!"
+},
+{
+	    "command": "/bye",
+        "typeSend": "sendMessage",
+		"response": "chauuu!!"
+},
+{
+    	"command": "/zorra",
+        "typeSend": "sendMessage",
+		"response": "Esa boca!!!"
+},
+{
+	    "command": "/Test1",
+        "typeSend": "sendDocument",
+		"response": "http://i.giphy.com/13IC4LVeP5NGNi.gif"
+},
+{
+    	"command": "/dale",
+        "typeSend": "sendDocument",
+		"response": "https://media.giphy.com/media/wqKYPX3oUUrn2/giphy.gif"
+},
+{
+	    "command": "/pimpam",
+        "typeSend": "sendDocument",
+		"response": "https://images3.imgbox.com/71/4a/FDQIzOoX_o.gif"
+},
+{
+	    "command": "/airea",
+        "typeSend": "sendDocument",
+		"response": "http://www.daidegasforum.com/images2/497/belen-rodriguez-capezzoli-1.gif"
+},
+{
+	    "command": "/fail",
+        "typeSend": "sendDocument",
+		"response": "https://giphy.com/gifs/fail-black-and-white-bob-dylan-li0dswKqIZNpm"
+},
+{
+	    "command": "/chof",
+        "typeSend": "sendDocument",
+		"response": "https://giphy.com/gifs/funny-fail-whoops-KHJw9NRFDMom487qyo"
+},
+{
+	    "command": "/epicfail",
+        "typeSend": "sendDocument",
+		"response": "https://giphy.com/gifs/reaction-mood-FewMZauWeGB0IpNpVO"
+},
+{
+	    "command": "/elppa",
+        "typeSend": "sendDocument",
+		"response": "https://giphy.com/gifs/apple-2c-GD2e9EJ0uDrzO"
+},
+{
+	    "command": "/patxaran",
+        "typeSend": "sendDocument",
+		"response": "https://media1.tenor.com/images/4656f258352e28f023d7109c3135c90f/tenor.gif?itemid=11817205"
+},
+{
+	    "command": "/carajillo",
+        "typeSend": "sendMessage",
+		"response": "https://cookpad.com/es/recetas/2123613-carajillo-de-3-colorets-de-castellon"
+}
+]
+}
+
