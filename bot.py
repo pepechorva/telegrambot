@@ -14,11 +14,11 @@ from subprocess import call
 from paho.mqtt import client as mqtt_client
 import urllib
 import requests
-import datetime  # Importing the datetime library
+import datetime
 import unicodedata
 
-saludoList = ["hola", "buenos dias", "buenos días", "wenos dias"]
-respuestaSaludo = ["Yep", "Hola", "Muy buenas", "Ah, hola"]
+saluteList = ["hola", "buenos dias", "buenos días", "wenos dias"]
+saluteResponse = ["Yep", "Hola", "Muy buenas", "Ah, hola"]
 
 f = open('commands.json')
 commandList = json.load(f)
@@ -35,17 +35,8 @@ def user_call(m):
         name = m.from_user.first_name
     return name
 
-def get_user_step(uid):
-    if uid in userStep:
-        return userStep[uid]
-    else:
-        knownUsers.append(uid)
-        userStep[uid] = 0
-        print("New user detected, who hasn't used \"/start\" yet")
-        return 0
-
-def guardaUrl(m):
-    file1 = open("urlsdelchat.txt", "a")  # append mode
+def storeURL(m):
+    file1 = open("urlsfromchat.txt", "a")
     data=m.text
     string_utf = data.encode()
     result = ""
@@ -69,7 +60,7 @@ def getUrl():
 def isBlacklistedUser(m):
     #TODO
     if m.chat.type == 'group' or m.chat.type == 'supergroup':
-        print("grupo: ", m.chat.type, " = ", m.chat.id)
+        print("group: ", m.chat.type, " = ", m.chat.id)
         return False #testing
         if any(word in message.text.lower() for word in ignoredUserList):
             return True
@@ -115,7 +106,6 @@ def listener(messages):
     """
     When new messages arrive TeleBot will call this function.
     """
-    #print("received: " + str(messages))
     for m in messages:
         result = ""
         if m.content_type == 'text':
@@ -133,24 +123,14 @@ def listener(messages):
 bot = telebot.TeleBot(TOKEN)
 bot.set_update_listener(listener) # register listener
 
-# handle the "/start" command
-@bot.message_handler(commands=['start'])
-def command_start(m):
-    if not isBlacklistedUser(m):
-        cid = m.chat.id
-        if cid not in knownUsers:
-            knownUsers.append(cid)
-            userStep[cid] = 0
-            #print(str(knownUsers))
-
-# Listar comandos
+# List commands
 @bot.message_handler(commands=['list'])
 def command_long_text(m):
     if not isBlacklistedUser(m):
         cid = m.chat.id
         bot.send_message(cid, str(commandList.keys()))
 
-# Reinicia servidor
+# Reboot server joke
 @bot.message_handler(commands=['reboot'])
 def command_long_text(m):
     if not isBlacklistedUser(m):
@@ -163,9 +143,9 @@ def command_long_text(m):
         time.sleep(3)
         bot.reply_to(m, "🖕")
 
-# Envia un gif de los establecidos
+# Send a response message from commands.json
 @bot.message_handler(commands=commandKeys)
-def send_gif(m):
+def send_response_message(m):
     if not isBlacklistedUser(m):
         command = m.text
         cid = m.chat.id
@@ -177,7 +157,7 @@ def send_gif(m):
             bot.send_message(cid, response)
             publish(client_id, response)
 
-# Enviarme la IP de la rasp a mi en privado
+# Send RaspBerry public IP to mi priate chat
 @bot.message_handler(commands=['ip'])
 def command_help(m):
     if not isBlacklistedUser(m):
@@ -189,23 +169,23 @@ def extract_arg(arg):
     return argumentstring
 
 @bot.message_handler(commands=['eltiempo'])
-def eltiempo(m):
+def weatherConsult(m):
     if not isBlacklistedUser(m):
         bot.send_message(m.chat.id, "Saca la cabeza por la ventana y no des por culo con tonterías.")
 
-# Ejecuta un comando
+# Execute a command from Rasp
 @bot.message_handler(commands=['exec'])
 def command_long_text(m):
     if not isBlacklistedUser(m):
         cid = m.chat.id
         bot.send_message(cid, "Ejecutando: "+m.text[len("/exec"):])
-        bot.send_chat_action(cid, 'typing') # show the bot "typing" (max. 5 secs)
-        time.sleep(2)
+        bot.send_chat_action(cid, 'typing')
         if cid == myID:
             f = os.popen(m.text[len("/exec"):])
             result = f.read()
             bot.send_message(cid, "Resultado: "+result)
         else:
+            time.sleep(2)
             bot.send_message(cid, "JA!!!")
             bot.send_chat_action(cid, 'typing')
             time.sleep(1)
@@ -214,21 +194,15 @@ def command_long_text(m):
             time.sleep(3)
             bot.reply_to(m, "🖕")
 
-# filter on a specific message
-@bot.message_handler(func=lambda message: "mmmkk" in message.text.lower())
-def command_text_kk(m):
-    return
-    bot.send_message(m.chat.id, "esto es mmmkk, @" + user_call(m) + "!")
-
 @bot.message_handler(func=lambda message: "buenas noches" in message.text.lower())
-def command_text_nanit(m):
+def command_text_goodnight(m):
     if not isBlacklistedUser(m):
         bot.send_message(m.chat.id, "Buenas noches, @" + user_call(m))
 
-@bot.message_handler(func=lambda message: any(saludo in message.text.lower() for saludo in saludoList))
-def command_text_saludo(m):
+@bot.message_handler(func=lambda message: any(salute in message.text.lower() for salute in saluteList))
+def command_text_salute(m):
     if not isBlacklistedUser(m):
-        bot.reply_to(m, random.choice(respuestaSaludo) + ", @" + user_call(m))
+        bot.reply_to(m, random.choice(saluteResponse) + ", @" + user_call(m))
 
 @bot.message_handler(func=lambda message: any(word in message.text.lower() for word in blasphemywords))
 def command_text_blasphemy(m):
@@ -237,7 +211,7 @@ def command_text_blasphemy(m):
 
 @bot.message_handler(func=lambda message: "http" in message.text.lower())
 def command_text_http(m):
-    guardaUrl(m)
+    storeURL(m)
 
 mqtt_client = connect_mqtt()
 mqtt_client.loop_start()
