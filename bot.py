@@ -128,7 +128,7 @@ bot.set_update_listener(listener) # register listener
 def command_long_text(m):
     if not isBlacklistedUser(m):
         cid = m.chat.id
-        bot.send_message(cid, str(commandList.keys()))
+        bot.send_message(cid, str(list(commandList.keys())))
 
 # Reboot server joke
 @bot.message_handler(commands=['reboot'])
