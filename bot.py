@@ -16,11 +16,11 @@ import requests
 import datetime
 import unicodedata
 
-saluteList = ["hola", "buenos dias", "buenos días", "wenos dias"]
-saluteResponse = ["Yep", "Hola", "Muy buenas", "Ah, hola"]
+salutes = ["hola", "buenos dias", "buenos días", "wenos dias"]
+saluteResponses = ["Yep", "Hola", "Muy buenas", "Ah, hola"]
 blasphemywords = ['zorra', 'capullo', 'joputa', 'gilipollas', 'mierda', 'gilipo']
 
-f = open('commands.json')
+f = open(pathForFiles + "commands.json", "r")
 commandList = json.load(f)
 f.close()
 ch = '/'
@@ -36,14 +36,13 @@ def user_call(m):
     return name
 
 def storeURL(m):
-    file1 = open("urlsfromchat.txt", "a")
-    data=m.text
-    string_utf = data.encode()
+    string_utf = m.text.encode()
     result = ""
     if(m.chat.type == 'private'):
         result = user_call(m) + " [" + user_call(m) + "]: " + str(string_utf, 'utf-8')
     else:
         result = user_call(m) + " [" + str(m.chat.title.encode(), 'utf-8') + "]: " + str(string_utf, 'utf-8')
+    file1 = open(pathForFiles + "urlsfromchat.txt", "a")
     file1.write(result)
     file1.write("\n")
     file1.close()
@@ -199,10 +198,10 @@ def command_text_goodnight(m):
     if not isBlacklistedUser(m):
         bot.send_message(m.chat.id, "Buenas noches, @" + user_call(m))
 
-@bot.message_handler(func=lambda message: any(salute in message.text.lower() for salute in saluteList))
+@bot.message_handler(func=lambda message: any(salute in message.text.lower() for salute in salutes))
 def command_text_salute(m):
     if not isBlacklistedUser(m):
-        bot.reply_to(m, random.choice(saluteResponse) + ", @" + user_call(m))
+        bot.reply_to(m, random.choice(saluteResponses) + ", @" + user_call(m))
 
 @bot.message_handler(func=lambda message: any(word in message.text.lower() for word in blasphemywords))
 def command_text_blasphemy(m):
