@@ -18,7 +18,11 @@
 	"/unbesin":{
 		"typeSend": "sendMessage",
 		"response": "😘"
-	},		
+	},
+	"/sauron":{
+		"typeSend": "sendMessage",
+		"response": "U+1F995"
+	},
 	"/carajillo": {
 		"typeSend": "sendMessage",
 		"response": "https://cookpad.com/es/recetas/2123613-carajillo-de-3-colorets-de-castellon"

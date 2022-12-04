@@ -10,7 +10,6 @@ mqttconf.py
 !bot.py
 !LICENSE
 !README.md
-!data.json   
+!commands.json   
 !blasphemywords.py
-!giflist.py
 
