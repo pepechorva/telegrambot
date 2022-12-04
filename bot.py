@@ -9,6 +9,7 @@ import os
 import json
 import jsonpickle
 import random
+from collections import defaultdict
 from subprocess import call
 from paho.mqtt import client as mqtt_client
 import urllib
@@ -16,16 +17,26 @@ import requests
 import datetime
 import unicodedata
 
+
 salutes = ["hola", "buenos dias", "buenos días", "wenos dias"]
 saluteResponses = ["Yep", "Hola", "Muy buenas", "Ah, hola"]
 blasphemywords = ['zorra', 'capullo', 'joputa', 'gilipollas', 'mierda', 'gilipo']
 
-f = open(pathForFiles + "commands.json", "r")
+
+f = open(commandJsonsFile, "r")
 commandList = json.load(f)
 f.close()
 ch = '/'
 commandKeys = [elem.replace(ch, '') for elem in commandList.keys()]
 
+f = open(ignoreUsersFile, "r")
+ignoredList = json.load(f)
+f.close()
+
+def extract_arg(arg):
+    argument = arg.split()[1:]
+    argumentstring = ' '.join(argument)
+    return argumentstring
 
 def user_call(m):
     name = None
@@ -35,6 +46,7 @@ def user_call(m):
         name = m.from_user.first_name
     return name
 
+#stores any URL sent to chats
 def storeURL(m):
     string_utf = m.text.encode()
     result = ""
@@ -42,29 +54,71 @@ def storeURL(m):
         result = user_call(m) + " [" + user_call(m) + "]: " + str(string_utf, 'utf-8')
     else:
         result = user_call(m) + " [" + str(m.chat.title.encode(), 'utf-8') + "]: " + str(string_utf, 'utf-8')
-    file1 = open(pathForFiles + "urlsfromchat.txt", "a")
-    file1.write(result)
-    file1.write("\n")
-    file1.close()
+    file1 = open(URLsFromChat, "a")
 
 def string_found(string1, string2):
     string1 = " " + string1.strip() + " "
     string2 = " " + string2.strip() + " "
     return string2.find(string1)
 
-def getUrl():
-    f = os.popen('curl https://api.ipify.org')
+def getPublicIP():
+    f = os.popen(getIP)
     return f.read()
 
+#Ignore users block
+
 def isBlacklistedUser(m):
-    #TODO
-    if m.chat.type == 'group' or m.chat.type == 'supergroup':
-        print("group: ", m.chat.type, " = ", m.chat.id)
-        return False #testing
-        if any(word in message.text.lower() for word in ignoredUserList):
-            return True
+    return isUserInBlacklist(m.chat.type, m.chat.id, m.from_user.id)
+
+def getUsersInBlacklist(chatType, chatID):
+    for groups in ignoredList[chatType]:
+        group = groups["idGroup"]
+        if group == chatID:
+            users = groups["idUsers"]
+            return users
+
+def isUserInBlacklist(chatType, chatID, userID):
+    users = getUsersInBlacklist(chatType, chatID)
+    if users is None:
+        return False
+    if userID in users:
+        return True
     return False
 
+def writeBlacklist():
+    json_object = json.dumps(ignoredList, indent=4)    
+    with open(ignoreUsersFile, "w") as outfile:
+        outfile.write(json_object)
+
+def addUserToBlacklist(chatType, chatID, userID):
+    if isUserInBlacklist(chatType, chatID, userID):
+        return
+    if not ignoredList[chatType]: 
+        new_key_values_dict = {"idGroup":chatID, "idUsers": [userID]}
+        ignoredList[chatType].append(new_key_values_dict)
+    else:
+        chatList = ignoredList[chatType]
+        for each in chatList:
+            if each["idGroup"] == chatID:
+                if userID not in each["idUsers"]:
+                    each["idUsers"].append(userID)
+                    writeBlacklist()
+                    return
+        new_key_values_dict = {"idGroup":chatID, "idUsers": [userID]}
+        ignoredList[chatType].append(new_key_values_dict)
+    writeBlacklist()
+
+def removeUserFromBlacklist(chatType, chatID, userID):
+    if not isUserInBlacklist(chatType, chatID, userID):
+        return
+    if not ignoredList[chatType]:
+        return
+    for each in ignoredList[chatType]:
+        if each["idGroup"] == chatID:
+            if userID in each["idUsers"]:
+                each["idUsers"].remove(userID)
+            writeBlacklist()
+            return
 
 
 """
@@ -125,9 +179,21 @@ bot.set_update_listener(listener) # register listener
 # List commands
 @bot.message_handler(commands=['list'])
 def command_long_text(m):
+    cid = m.chat.id
     if not isBlacklistedUser(m):
-        cid = m.chat.id
         bot.send_message(cid, str(list(commandList.keys())))
+    print("/ignoramebot", "/hazmecasitobot")
+    bot.send_message(cid, "/ignoramebot, /hazmecasitobot")
+
+
+@bot.message_handler(commands=["ignoramebot"])
+def blacklistUser(m):
+    addUserToBlacklist(m.chat.type, m.chat.id, m.from_user.id)
+
+@bot.message_handler(commands=["hazmecasitobot"])
+def whitelistUser(m):
+    removeUserFromBlacklist(m.chat.type, m.chat.id, m.from_user.id)
+
 
 # Reboot server joke
 @bot.message_handler(commands=['reboot'])
@@ -148,6 +214,10 @@ def send_response_message(m):
     if not isBlacklistedUser(m):
         command = m.text
         cid = m.chat.id
+        if "@" in command:
+            command = command.split('@')
+            command = command[0]
+        print("command = ", command, " cid = ", cid, " sendDocument = ", commandList[command]["typeSend"])
         if "sendDocument" in commandList[command]["typeSend"]:
             bot.send_document(cid, commandList[command]["response"])
         elif "sendMessage" in commandList[command]["typeSend"]:
@@ -160,12 +230,7 @@ def send_response_message(m):
 @bot.message_handler(commands=['ip'])
 def command_help(m):
     if not isBlacklistedUser(m):
-        bot.send_message(myID, "IP: "+ getUrl())
-
-def extract_arg(arg):
-    argument = arg.split()[1:]
-    argumentstring = ' '.join(argument)
-    return argumentstring
+        bot.send_message(myID, "IP: "+ getPublicIP())
 
 @bot.message_handler(commands=['eltiempo'])
 def weatherConsult(m):
@@ -212,9 +277,10 @@ def command_text_blasphemy(m):
 def command_text_http(m):
     storeURL(m)
 
+
 mqtt_client = connect_mqtt()
 mqtt_client.loop_start()
 publish(mqtt_client, "first message!")
 
-bot.send_message(myID, "Bot iniciado en IP: "+getUrl())
+bot.send_message(myID, "Bot iniciado en IP: "+getPublicIP())
 bot.polling(none_stop=True, timeout=300)
