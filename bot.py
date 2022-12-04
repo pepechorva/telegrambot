@@ -1,7 +1,6 @@
 #!/usr/bin/env python3.9
 
 from config import *
-from blasphemywords import *
 from mqttconf import *
 import telebot
 from telebot import types
@@ -19,6 +18,7 @@ import unicodedata
 
 saluteList = ["hola", "buenos dias", "buenos días", "wenos dias"]
 saluteResponse = ["Yep", "Hola", "Muy buenas", "Ah, hola"]
+blasphemywords = ['zorra', 'capullo', 'joputa', 'gilipollas', 'mierda', 'gilipo']
 
 f = open('commands.json')
 commandList = json.load(f)
