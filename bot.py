@@ -2,9 +2,8 @@
 
 from config import *
 from mqttconf import *
-import telebot
-from telebot import types
-import time
+from telebot import *
+from time import *
 import os
 import json
 import jsonpickle
@@ -16,6 +15,8 @@ import urllib
 import requests
 import datetime
 import unicodedata
+from concurrent.futures import ThreadPoolExecutor
+import requests 
 
 
 salutes = ["hola", "buenos dias", "buenos días", "wenos dias"]
@@ -48,13 +49,15 @@ def user_call(m):
 
 #stores any URL sent to chats
 def storeURL(m):
+    file1 = open(URLsFromChat, "a")
     string_utf = m.text.encode()
     result = ""
     if(m.chat.type == 'private'):
         result = user_call(m) + " [" + user_call(m) + "]: " + str(string_utf, 'utf-8')
     else:
         result = user_call(m) + " [" + str(m.chat.title.encode(), 'utf-8') + "]: " + str(string_utf, 'utf-8')
-    file1 = open(URLsFromChat, "a")
+    file1.write(result)
+    file1.close()
 
 def string_found(string1, string2):
     string1 = " " + string1.strip() + " "
@@ -62,8 +65,12 @@ def string_found(string1, string2):
     return string2.find(string1)
 
 def getPublicIP():
-    f = os.popen(getIP)
-    return f.read()
+    for url in getIPList:
+        s = requests.get(url,timeout=5)
+        if s.status_code == 200:
+            return s.content.decode()
+    return "no obtenida"
+
 
 #Ignore users block
 
@@ -185,7 +192,6 @@ def command_long_text(m):
     print("/ignoramebot", "/hazmecasitobot")
     bot.send_message(cid, "/ignoramebot, /hazmecasitobot")
 
-
 @bot.message_handler(commands=["ignoramebot"])
 def blacklistUser(m):
     addUserToBlacklist(m.chat.type, m.chat.id, m.from_user.id)
@@ -226,11 +232,14 @@ def send_response_message(m):
             bot.send_message(cid, response)
             publish(client_id, response)
 
+
+
 # Send RaspBerry public IP to mi priate chat
 @bot.message_handler(commands=['ip'])
 def command_help(m):
-    if not isBlacklistedUser(m):
-        bot.send_message(myID, "IP: "+ getPublicIP())
+    if m.chat.id == myID:
+        r= getPublicIP()
+        bot.send_message(m.chat.id, "ip = " + r)
 
 @bot.message_handler(commands=['eltiempo'])
 def weatherConsult(m):
@@ -248,15 +257,6 @@ def command_long_text(m):
             f = os.popen(m.text[len("/exec"):])
             result = f.read()
             bot.send_message(cid, "Resultado: "+result)
-        else:
-            time.sleep(2)
-            bot.send_message(cid, "JA!!!")
-            bot.send_chat_action(cid, 'typing')
-            time.sleep(1)
-            bot.send_message(cid, "tus ganas locas")
-            bot.send_chat_action(cid, 'typing')
-            time.sleep(3)
-            bot.reply_to(m, "🖕")
 
 @bot.message_handler(func=lambda message: "buenas noches" in message.text.lower())
 def command_text_goodnight(m):
@@ -282,5 +282,5 @@ mqtt_client = connect_mqtt()
 mqtt_client.loop_start()
 publish(mqtt_client, "first message!")
 
-bot.send_message(myID, "Bot iniciado en IP: "+getPublicIP())
+bot.send_message(myID, "Bot iniciado!")
 bot.polling(none_stop=True, timeout=300)
