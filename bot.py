@@ -3,7 +3,7 @@
 from config import *
 from mqttconf import *
 from telebot import *
-from time import *
+from time import sleep
 import os
 import json
 import jsonpickle
@@ -21,14 +21,17 @@ import requests
 
 salutes = ["hola", "buenos dias", "buenos días", "wenos dias"]
 saluteResponses = ["Yep", "Hola", "Muy buenas", "Ah, hola"]
-blasphemywords = ['zorra', 'capullo', 'joputa', 'gilipollas', 'mierda', 'gilipo']
+blasphemywords = ['zorra', 'capullo', 'joputa', 'gilipollas', 'mierda', 'gilipo', 'puta ']
 
+def readCommandJsonsFile():
+    f = open(commandJsonsFile, "r")
+    commandList = json.load(f)
+    f.close()
+    ch = '/'
+    commandKeys = [elem.replace(ch, '') for elem in commandList.keys()]
+    return commandList, commandKeys
 
-f = open(commandJsonsFile, "r")
-commandList = json.load(f)
-f.close()
-ch = '/'
-commandKeys = [elem.replace(ch, '') for elem in commandList.keys()]
+commandList, commandKeys = readCommandJsonsFile()
 
 f = open(ignoreUsersFile, "r")
 ignoredList = json.load(f)
@@ -56,7 +59,7 @@ def storeURL(m):
         result = user_call(m) + " [" + user_call(m) + "]: " + str(string_utf, 'utf-8')
     else:
         result = user_call(m) + " [" + str(m.chat.title.encode(), 'utf-8') + "]: " + str(string_utf, 'utf-8')
-    file1.write(result)
+    file1.write(result + "\n")
     file1.close()
 
 def string_found(string1, string2):
@@ -236,10 +239,30 @@ def send_response_message(m):
 
 # Send RaspBerry public IP to mi priate chat
 @bot.message_handler(commands=['ip'])
-def command_help(m):
+def command_ip(m):
     if m.chat.id == myID:
         r= getPublicIP()
         bot.send_message(m.chat.id, "ip = " + r)
+
+# Delete, change and create gif command
+@bot.message_handler(commands=['gif'])
+def command_gif(m):
+    cid = m.chat.id
+    if not cid == myID:
+        bot.send_chat_action(cid, 'typing')
+        time.sleep(3)
+        bot.reply_to(m, "🖕")
+        return
+    bot.reply_to(m, "Vamos a ello!")
+    bot.send_message(cid, "Pillando args de: "+m.text[len("/gif"):])
+    gifActionList = m.text.split(" ")
+    print("GifAction elements = " + str(len(gifActionList)))
+    if not len(gifActionList) == 5:
+        bot.send_message(cid, "gif command:  action + name + typeSend + response")
+        return
+    ##crear el elemento en el json
+    bot.send_message(cid, "gif command: " + gifActionList[1] + " " + gifActionList[2] + " " + gifActionList[3] + " " + gifActionList[4] + " " )
+    return
 
 @bot.message_handler(commands=['eltiempo'])
 def weatherConsult(m):

@@ -35,14 +35,6 @@
 		"typeSend": "sendDocument",
 		"response": "https://media.giphy.com/media/wqKYPX3oUUrn2/giphy.gif"
 	},
-	"/pimpam": {
-		"typeSend": "sendDocument",
-		"response": "https://images3.imgbox.com/71/4a/FDQIzOoX_o.gif"
-	},
-	"/airea": {
-		"typeSend": "sendDocument",
-		"response": "http://www.daidegasforum.com/images2/497/belen-rodriguez-capezzoli-1.gif"
-	},
 	"/fail": {
 		"typeSend": "sendDocument",
 		"response": "https://giphy.com/gifs/fail-black-and-white-bob-dylan-li0dswKqIZNpm"
@@ -61,7 +53,8 @@
 	},
 	"/patxaran": {
 		"typeSend": "sendDocument",
-		"response": "https://media1.tenor.com/images/4656f258352e28f023d7109c3135c90f/tenor.gif?itemid=11817205"
+		"response": "https://giphy.com/gifs/funny-horror-creepy-KzGCAlMiK6hQQ",
+		"oldResponse": "https://media1.tenor.com/images/4656f258352e28f023d7109c3135c90f/tenor.gif?itemid=11817205"
 	},
 	"/bye2":{
 		"typeSend": "sendDocument",
@@ -107,14 +100,6 @@
 		"typeSend": "sendDocument",
 		"response": "https://media.giphy.com/media/szlSwLwiXBEeQ/giphy.gif"
 	},
-	"/pim_pam":		{
-		"typeSend": "sendDocument",
-		"response": "https://images3.imgbox.com/71/4a/FDQIzOoX_o.gif"
-	},
-	"/airea_":		{
-		"typeSend": "sendDocument",
-		"response": "http://www.daidegasforum.com/images2/497/belen-rodriguez-capezzoli-1.gif"
-	},
 	"/byebye":		{
 		"typeSend": "sendDocument",
 		"response": "http://giphygifs.s3.amazonaws.com/media/GB7AfEnRyAPcI/giphy.gif"
@@ -139,16 +124,12 @@
 		"typeSend": "sendDocument",
 		"response": "http://giphygifs.s3.amazonaws.com/media/jUwpNzg9IcyrK/giphy.gif"
 	},
-	"/patxaran_no":	{
-		"typeSend": "sendDocument",
-		"response": "https://media1.tenor.com/images/4656f258352e28f023d7109c3135c90f/tenor.gif?itemid=11817205"
-	},
 	"/queosfollen":	{
 		"typeSend": "sendDocument",
 		"response": "https://media.giphy.com/media/143cE5FtVmKrNC/giphy.gif"
 	},
-	"/dindindin":	{
+	"/nice":	{
 		"typeSend": "sendDocument",
-		"response": "https://media.giphy.com/media/j06A7M6HlkFPO/giphy.gif"
+		"response": "https://media.giphy.com/media/9wp9Ollq9usH6/giphy.gif"
 	}
 }
