@@ -7,7 +7,7 @@
 		"typeSend": "sendMessage",
 		"response": "👋"
 	},
-	"/zorra": {
+	"/joputa": {
 		"typeSend": "sendMessage",
 		"response": "🖕"
 	},
@@ -19,10 +19,7 @@
 		"typeSend": "sendMessage",
 		"response": "😘"
 	},
-	"/sauron":{
-		"typeSend": "sendMessage",
-		"response": "U+1F995"
-	},
+	
 	"/carajillo": {
 		"typeSend": "sendMessage",
 		"response": "https://cookpad.com/es/recetas/2123613-carajillo-de-3-colorets-de-castellon"
@@ -127,9 +124,5 @@
 	"/queosfollen":	{
 		"typeSend": "sendDocument",
 		"response": "https://media.giphy.com/media/143cE5FtVmKrNC/giphy.gif"
-	},
-	"/nice":	{
-		"typeSend": "sendDocument",
-		"response": "https://media.giphy.com/media/9wp9Ollq9usH6/giphy.gif"
 	}
 }
