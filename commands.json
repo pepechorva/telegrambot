@@ -124,5 +124,13 @@
 	"/queosfollen":	{
 		"typeSend": "sendDocument",
 		"response": "https://media.giphy.com/media/143cE5FtVmKrNC/giphy.gif"
+	},
+	"/dindindin":	{
+		"typeSend": "sendDocument",
+		"response": "https://media.giphy.com/media/j06A7M6HlkFPO/giphy.gif"
+	},
+	"/nice":	{
+		"typeSend": "sendDocument",
+		"response": "https://media.giphy.com/media/9wp9Ollq9usH6/giphy.gif"
 	}
 }
