@@ -136,5 +136,9 @@
 	"/proud":	{
 		"typeSend": "sendDocument",
 		"response": "https://media.giphy.com/media/NEvPzZ8bd1V4Y/giphy.gif"
+	},
+	"/goodmorning":	{
+		"typeSend": "sendDocument",
+		"response": "https://media.giphy.com/media/xlGYf1RUbYYes/giphy.gif"
 	}
 }
