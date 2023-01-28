@@ -140,5 +140,17 @@
 	"/goodmorning":	{
 		"typeSend": "sendDocument",
 		"response": "https://media.giphy.com/media/xlGYf1RUbYYes/giphy.gif"
+	},
+	"/walkingchip":	{
+		"typeSend": "sendDocument",
+		"response": "https://media.giphy.com/media/Cr2W4mR5rgGXdzJQx1/giphy-downsized-large.gif"
+	},
+	"/hostiatorero":	{
+		"typeSend": "sendDocument",
+		"response": "https://media.giphy.com/media/XgbV8BANnW7PzkJNSv/giphy.gif"
+	},
+	"/telodije":	{
+		"typeSend": "sendDocument",
+		"response": "https://media.giphy.com/media/F6V2W4hmDclqO9uQhe/giphy.gif"
 	}
 }
