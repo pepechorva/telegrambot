@@ -132,5 +132,9 @@
 	"/nice":	{
 		"typeSend": "sendDocument",
 		"response": "https://media.giphy.com/media/9wp9Ollq9usH6/giphy.gif"
+	},
+	"/proud":	{
+		"typeSend": "sendDocument",
+		"response": "https://media.giphy.com/media/NEvPzZ8bd1V4Y/giphy.gif"
 	}
 }
