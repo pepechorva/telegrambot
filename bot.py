@@ -259,6 +259,7 @@ def command_gif(m):
     print("GifAction elements = " + str(len(gifActionList)))
     if not len(gifActionList) == 5:
         bot.send_message(cid, "gif command:  action + name + typeSend + response")
+        bot.send_message(cid, "ejemplo:\n /gif add unbesin sendMessage 😘")
         return
     ##crear el elemento en el json
     bot.send_message(cid, "gif command: " + gifActionList[1] + " " + gifActionList[2] + " " + gifActionList[3] + " " + gifActionList[4] + " " )
