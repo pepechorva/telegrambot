@@ -19,12 +19,15 @@ import datetime
 import unicodedata
 from concurrent.futures import ThreadPoolExecutor
 import requests 
+from inspect import currentframe, getframeinfo
+
+
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 
 #TELEBOT
-myID = config["Telebot"]["myID"]
+myID = config.getint("Telebot", "myID")
 
 #MQTT
 client_id   = config["MQTT"]["client_id"]
@@ -79,7 +82,7 @@ def string_found(string1, string2):
     return string2.find(string1)
 
 def getPublicIP():
-    for url in getIPList:
+    for url in config["IP"]["getIPList"].split(','):
         s = requests.get(url,timeout=5)
         if s.status_code == 200:
             return s.content.decode()
@@ -191,7 +194,6 @@ def listener(messages):
             else:
                 result += " [" + str(m.chat.title.encode(), 'utf-8') + "]: " 
             result += str(string_utf, 'utf-8')
-            print(result)
             publish(client_id, result)
 
 bot = telebot.TeleBot(config.get("Telebot", "TOKEN"))
@@ -203,7 +205,6 @@ def command_long_text(m):
     cid = m.chat.id
     if not isBlacklistedUser(m):
         bot.send_message(cid, str(list(commandList.keys())))
-    print("/ignoramebot", "/hazmecasitobot")
     bot.send_message(cid, "/ignoramebot, /hazmecasitobot")
 
 @bot.message_handler(commands=["ignoramebot"])
@@ -237,12 +238,10 @@ def send_response_message(m):
         if "@" in command:
             command = command.split('@')
             command = command[0]
-        print("command = ", command, " cid = ", cid, " sendDocument = ", commandList[command]["typeSend"])
         if "sendDocument" in commandList[command]["typeSend"]:
             bot.send_document(cid, commandList[command]["response"])
         elif "sendMessage" in commandList[command]["typeSend"]:
             response = str(commandList[command]["response"])
-            print(response)
             bot.send_message(cid, response)
             publish(client_id, response)
 
