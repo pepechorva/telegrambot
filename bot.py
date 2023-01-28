@@ -1,7 +1,9 @@
 #!/usr/bin/env python3.9
 
-from config import *
-from mqttconf import *
+import configparser
+import io
+#from config import *
+#from mqttconf import *
 from telebot import *
 from time import sleep
 import os
@@ -18,13 +20,22 @@ import unicodedata
 from concurrent.futures import ThreadPoolExecutor
 import requests 
 
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+#TELEBOT
+myID = config["Telebot"]["myID"]
+
+#MQTT
+client_id   = config["MQTT"]["client_id"]
+
 
 salutes = ["hola", "buenos dias", "buenos días", "wenos dias"]
 saluteResponses = ["Yep", "Hola", "Muy buenas", "Ah, hola"]
 blasphemywords = ['zorra', 'capullo', 'joputa', 'gilipollas', 'mierda', 'gilipo', 'puta ']
 
 def readCommandJsonsFile():
-    f = open(commandJsonsFile, "r")
+    f = open(config["Paths"]["commandJsonsFile"], "r")
     commandList = json.load(f)
     f.close()
     ch = '/'
@@ -33,7 +44,7 @@ def readCommandJsonsFile():
 
 commandList, commandKeys = readCommandJsonsFile()
 
-f = open(ignoreUsersFile, "r")
+f = open(config["Paths"]["ignoreUsersFile"], "r")
 ignoredList = json.load(f)
 f.close()
 
@@ -52,7 +63,7 @@ def user_call(m):
 
 #stores any URL sent to chats
 def storeURL(m):
-    file1 = open(URLsFromChat, "a")
+    file1 = open(config["Paths"]["URLsFromChat"], "a")
     string_utf = m.text.encode()
     result = ""
     if(m.chat.type == 'private'):
@@ -97,7 +108,7 @@ def isUserInBlacklist(chatType, chatID, userID):
 
 def writeBlacklist():
     json_object = json.dumps(ignoredList, indent=4)    
-    with open(ignoreUsersFile, "w") as outfile:
+    with open(config["Paths"]["ignoreUsersFile"], "w") as outfile:
         outfile.write(json_object)
 
 def addUserToBlacklist(chatType, chatID, userID):
@@ -141,18 +152,18 @@ def connect_mqtt():
         else:
             print("Failed to connect, return code %d\n", rc)
     client = mqtt_client.Client(client_id)
-    client.username_pw_set(username, password)
+    client.username_pw_set(config["MQTT"]["username"], config["MQTT"]["password"])
     client.on_connect = on_connect
-    client.connect(broker, port)
+    client.connect(config.get("MQTT", "broker"), config.getint("MQTT", "port"))
     return client
 
 def publish(client, msg):
     mqttmsg = jsonpickle.encode(msg)
-    result = mqtt_client.publish(topic, mqttmsg)
+    result = mqtt_client.publish(config["MQTT"]["topic"], mqttmsg)
 
 def publishToTopic(client, newTopic, msg):
     mqttmsg = jsonpickle.encode(msg)
-    result = mqtt_client.publish(topic + '/' + newTopic, mqttmsg.encode("utf-8"))
+    result = mqtt_client.publish(config["MQTT"]["topic"] + '/' + newTopic, mqttmsg.encode("utf-8"))
 
 
 """
@@ -183,7 +194,7 @@ def listener(messages):
             print(result)
             publish(client_id, result)
 
-bot = telebot.TeleBot(TOKEN)
+bot = telebot.TeleBot(config.get("Telebot", "TOKEN"))
 bot.set_update_listener(listener) # register listener
 
 # List commands
