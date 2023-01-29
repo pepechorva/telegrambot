@@ -2,8 +2,6 @@
 
 import configparser
 import io
-#from config import *
-#from mqttconf import *
 from telebot import *
 from time import sleep
 import os
@@ -21,13 +19,18 @@ from concurrent.futures import ThreadPoolExecutor
 import requests 
 from inspect import currentframe, getframeinfo
 
+import logging
+
+#DEBUGGING
+logging.basicConfig(format='%(lineno)d %(message)s', level=logging.DEBUG)
 
 
+logging.info("Loading config from file...")
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read("/etc/botconfig.ini")
 
 #TELEBOT
-myID = config.getint("Telebot", "myID")
+myID = config.getint('Telebot', 'myID')
 
 #MQTT
 client_id   = config["MQTT"]["client_id"]
@@ -39,11 +42,11 @@ blasphemywords = ['zorra', 'capullo', 'joputa', 'gilipollas', 'mierda', 'gilipo'
 
 def readCommandJsonsFile():
     f = open(config["Paths"]["commandJsonsFile"], "r")
-    commandList = json.load(f)
+    commandListJson = json.load(f)
     f.close()
     ch = '/'
-    commandKeys = [elem.replace(ch, '') for elem in commandList.keys()]
-    return commandList, commandKeys
+    commandKeysList = [elem.replace(ch, '') for elem in commandListJson.keys()]
+    return commandListJson, commandKeysList
 
 commandList, commandKeys = readCommandJsonsFile()
 
@@ -150,10 +153,14 @@ MQTT connection
 """
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
+        connection = ""
         if rc == 0:
-            print("Connected to MQTT Broker!")
+            connection = "Connected to MQTT Broker!\n"
         else:
-            print("Failed to connect, return code %d\n", rc)
+            connection = "Failed to connect, return code " + rc + "\n"
+        logging.info(connection)
+        print(connection)
+
     client = mqtt_client.Client(client_id)
     client.username_pw_set(config["MQTT"]["username"], config["MQTT"]["password"])
     client.on_connect = on_connect
@@ -203,9 +210,10 @@ bot.set_update_listener(listener) # register listener
 @bot.message_handler(commands=['list'])
 def command_long_text(m):
     cid = m.chat.id
+    response = ""
     if not isBlacklistedUser(m):
-        bot.send_message(cid, str(list(commandList.keys())))
-    bot.send_message(cid, "/ignoramebot, /hazmecasitobot")
+        response = ' '.join(list(commandList.keys()))
+    bot.send_message(cid, response + " /ignoramebot, /hazmecasitobot")
 
 @bot.message_handler(commands=["ignoramebot"])
 def blacklistUser(m):
