@@ -212,8 +212,8 @@ def command_long_text(m):
     cid = m.chat.id
     response = ""
     if not isBlacklistedUser(m):
-        response = ' '.join(list(commandList.keys()))
-    bot.send_message(cid, response + " /ignoramebot, /hazmecasitobot")
+        response = ', '.join(list(commandList.keys())) + " /ruleta, " + " /ignoramebot, "
+    bot.send_message(cid, response + "/hazmecasitobot")
 
 @bot.message_handler(commands=["ignoramebot"])
 def blacklistUser(m):
@@ -222,6 +222,31 @@ def blacklistUser(m):
 @bot.message_handler(commands=["hazmecasitobot"])
 def whitelistUser(m):
     removeUserFromBlacklist(m.chat.type, m.chat.id, m.from_user.id)
+
+# List commands
+@bot.message_handler(commands=['ruleta'])
+def command_long_text(m):
+    cid = m.chat.id
+    if not isBlacklistedUser(m):
+        trigger = random.randint(0, 5)
+        logging.info("Ruleta, trigger == %d", trigger)
+        #logging.info("chat_id = %d, user_id = %d, myID = %d", m.chat.id, m.from_user.id, myID)
+        #logging.info(m)
+        if trigger < 5:
+            bot.send_document(cid, 'https://media.giphy.com/media/s9Y0czwWdTtB7U6d5I/giphy.gif')
+        else:
+            bot.send_document(cid, 'https://media.giphy.com/media/fe4dDMD2cAU5RfEaCU/giphy.gif')
+            bot.send_chat_action(cid, 'typing')
+            time.sleep(3)
+            bot.send_message(cid, "BANNED!!")
+            time.sleep(3)
+            try:
+                bot.ban_chat_member(m.chat.id, m.from_user.id)
+            except:
+                bot.send_message(cid, "Emmm... mejor no, que me me baneas tu 😅")
+
+
+
 
 
 # Reboot server joke
@@ -265,22 +290,23 @@ def command_ip(m):
 # Delete, change and create gif command
 @bot.message_handler(commands=['gif'])
 def command_gif(m):
-    cid = m.chat.id
-    if not cid == myID:
-        bot.send_chat_action(cid, 'typing')
-        time.sleep(3)
-        bot.reply_to(m, "🖕")
-        return
-    bot.reply_to(m, "Vamos a ello!")
-    bot.send_message(cid, "Pillando args de: "+m.text[len("/gif"):])
-    gifActionList = m.text.split(" ")
-    print("GifAction elements = " + str(len(gifActionList)))
-    if not len(gifActionList) == 5:
-        bot.send_message(cid, "gif command:  action + name + typeSend + response")
-        bot.send_message(cid, "ejemplo:\n /gif add unbesin sendMessage 😘")
-        return
-    ##crear el elemento en el json
-    bot.send_message(cid, "gif command: " + gifActionList[1] + " " + gifActionList[2] + " " + gifActionList[3] + " " + gifActionList[4] + " " )
+    if not isBlacklistedUser(m):
+        cid = m.chat.id
+        if not cid == myID:
+            bot.send_chat_action(cid, 'typing')
+            time.sleep(3)
+            bot.reply_to(m, "🖕")
+            return
+        bot.reply_to(m, "Vamos a ello!")
+        bot.send_message(cid, "Pillando args de: "+m.text[len("/gif"):])
+        gifActionList = m.text.split(" ")
+        print("GifAction elements = " + str(len(gifActionList)))
+        if not len(gifActionList) == 5:
+            bot.send_message(cid, "gif command:  action + name + typeSend + response")
+            bot.send_message(cid, "ejemplo:\n /gif add unbesin sendMessage 😘")
+            return
+        ##crear el elemento en el json
+        bot.send_message(cid, "gif command: " + gifActionList[1] + " " + gifActionList[2] + " " + gifActionList[3] + " " + gifActionList[4] + " " )
     return
 
 @bot.message_handler(commands=['eltiempo'])

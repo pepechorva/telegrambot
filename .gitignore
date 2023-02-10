@@ -1,11 +1,7 @@
 # Ignore everything
 *
 
-#make sure these files are ignored
-config.py
-mqttconf.py
-
-# But not these files...
+# Except these files...
 !.gitignore
 !bot.py
 !LICENSE
