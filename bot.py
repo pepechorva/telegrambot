@@ -37,8 +37,8 @@ client_id   = config["MQTT"]["client_id"]
 
 
 salutes = ["hola", "buenos dias", "buenos días", "wenos dias"]
-saluteResponses = ["Yep", "Hola", "Muy buenas", "Ah, hola"]
-blasphemywords = ['zorra', 'capullo', 'joputa', 'gilipollas', 'mierda', 'gilipo', 'puta ']
+saluteResponses = ["Yep", "Hola", "Muy buenas", "Ah, hola", "Hombreeee"]
+blasphemywords = ['zorra', 'capullo', 'joputa', 'mierda', 'gilipo', 'cabronazo', 'puta ']
 
 def readCommandJsonsFile():
     f = open(config["Paths"]["commandJsonsFile"], "r")
@@ -161,7 +161,8 @@ def connect_mqtt():
         logging.info(connection)
         print(connection)
 
-    client = mqtt_client.Client(client_id)
+    client = mqtt_client.Client(mqtt_client.CallbackAPIVersion.VERSION1, client_id)
+
     client.username_pw_set(config["MQTT"]["username"], config["MQTT"]["password"])
     client.on_connect = on_connect
     client.connect(config.get("MQTT", "broker"), config.getint("MQTT", "port"))
@@ -194,6 +195,7 @@ def listener(messages):
         result = ""
         if m.content_type == 'text':
             data=m.text
+            print(m.text)
             string_utf = data.encode()
             result = user_call(m)
             if(m.chat.type == 'private'):
@@ -212,7 +214,8 @@ def command_long_text(m):
     cid = m.chat.id
     response = ""
     if not isBlacklistedUser(m):
-        response = ', '.join(list(commandList.keys())) + " /ruleta, " + " /ignoramebot, "
+        commandList, commandKeys = readCommandJsonsFile()
+        response = ', '.join(list(commandList.keys())) + ", /ruleta, " + " /ignoramebot, "
     bot.send_message(cid, response + "/hazmecasitobot")
 
 @bot.message_handler(commands=["ignoramebot"])
@@ -240,6 +243,7 @@ def command_long_text(m):
             time.sleep(3)
             bot.send_message(cid, "BANNED!!")
             time.sleep(3)
+            #bot.send_message(cid, "Emmm... te libras porque es un Cristo meterte de nuevo... 😅")
             try:
                 bot.ban_chat_member(m.chat.id, m.from_user.id)
             except:
@@ -271,6 +275,7 @@ def send_response_message(m):
         if "@" in command:
             command = command.split('@')
             command = command[0]
+        commandList, commandKeys = readCommandJsonsFile()
         if "sendDocument" in commandList[command]["typeSend"]:
             bot.send_document(cid, commandList[command]["response"])
         elif "sendMessage" in commandList[command]["typeSend"]:
@@ -279,40 +284,12 @@ def send_response_message(m):
             publish(client_id, response)
 
 
-
-# Send RaspBerry public IP to mi priate chat
+# Send RaspBerry public IP to my private chat
 @bot.message_handler(commands=['ip'])
 def command_ip(m):
     if m.chat.id == myID:
         r= getPublicIP()
         bot.send_message(m.chat.id, "ip = " + r)
-
-# Delete, change and create gif command
-@bot.message_handler(commands=['gif'])
-def command_gif(m):
-    if not isBlacklistedUser(m):
-        cid = m.chat.id
-        if not cid == myID:
-            bot.send_chat_action(cid, 'typing')
-            time.sleep(3)
-            bot.reply_to(m, "🖕")
-            return
-        bot.reply_to(m, "Vamos a ello!")
-        bot.send_message(cid, "Pillando args de: "+m.text[len("/gif"):])
-        gifActionList = m.text.split(" ")
-        print("GifAction elements = " + str(len(gifActionList)))
-        if not len(gifActionList) == 5:
-            bot.send_message(cid, "gif command:  action + name + typeSend + response")
-            bot.send_message(cid, "ejemplo:\n /gif add unbesin sendMessage 😘")
-            return
-        ##crear el elemento en el json
-        bot.send_message(cid, "gif command: " + gifActionList[1] + " " + gifActionList[2] + " " + gifActionList[3] + " " + gifActionList[4] + " " )
-    return
-
-@bot.message_handler(commands=['eltiempo'])
-def weatherConsult(m):
-    if not isBlacklistedUser(m):
-        bot.send_message(m.chat.id, "Saca la cabeza por la ventana y no des por culo con tonterías.")
 
 # Execute a command from Rasp
 @bot.message_handler(commands=['exec'])
@@ -352,3 +329,4 @@ publish(mqtt_client, "first message!")
 
 bot.send_message(myID, "Bot iniciado!")
 bot.polling(none_stop=True, timeout=300)
+

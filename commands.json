@@ -19,7 +19,10 @@
 		"typeSend": "sendMessage",
 		"response": "😘"
 	},
-	
+	"/pananismo" :{
+		"typeSend": "sendMessage",
+		"response": "El pananismo es una enfermedad que afecta a cacharreadores natos en la que llegan a un punto en la que ya no hacen nada, porque se lo cuestionan todo:\n\n-Voy a hacer una tarjeta para... \n-¿Para qué? \n-Pues para nada...  \n\n-Podría mirar a ver si.... \n-¿Para que? \n-Pues para nada... \n\n-Y si me pongo con.... bah, para nada... \npara nada... para nada...  paná... paná...\nPANANISMO.\n\nEn este grupo hay varios diagnosticados con pananismo crónico desde hace años... \n\n Y no, no te rías, es CONTAGIOSO. Se contagia incluso a través de chats. Es muy peligroso. \n😔 "
+	},
 	"/carajillo": {
 		"typeSend": "sendMessage",
 		"response": "https://cookpad.com/es/recetas/2123613-carajillo-de-3-colorets-de-castellon"
@@ -28,40 +31,55 @@
 		"typeSend": "sendDocument",
 		"response": "http://i.giphy.com/13IC4LVeP5NGNi.gif"
 	},
+	"/pimpam": {
+		"typeSend": "sendDocument",
+		"response": "https://images3.imgbox.com/71/4a/FDQIzOoX_o.gif"
+	},
+	"/airea": {
+		"typeSend": "sendDocument",
+		"response": "http://www.daidegasforum.com/images2/497/belen-rodriguez-capezzoli-1.gif"
+	},
 	"/dale": {
 		"typeSend": "sendDocument",
 		"response": "https://media.giphy.com/media/wqKYPX3oUUrn2/giphy.gif"
 	},
 	"/fail": {
 		"typeSend": "sendDocument",
-		"response": "https://giphy.com/gifs/fail-black-and-white-bob-dylan-li0dswKqIZNpm"
+		"response": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaHp3OGZiNWY3YWwycHQ5dTZqa2k1dHFkZTd2eGpsMW1ycHFpaGpzcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/li0dswKqIZNpm/giphy.gif"
 	},
 	"/chof": {
 		"typeSend": "sendDocument",
-		"response": "https://giphy.com/gifs/funny-fail-whoops-KHJw9NRFDMom487qyo"
+		"response": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaTY2OGs1aWp2dzl1Yjg3MzdibDU0Z2tuejFndWx6ejZ3b2I5dHM0ZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/KHJw9NRFDMom487qyo/giphy.gif"
 	},
 	"/epicfail": {
 		"typeSend": "sendDocument",
-		"response": "https://giphy.com/gifs/reaction-mood-FewMZauWeGB0IpNpVO"
+		"response": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDN0NmVzc2NmeWtqaGNha2N2Nmc2bWFiMHQ3dzJtenBpbnp5dncwMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/FewMZauWeGB0IpNpVO/giphy-downsized-large.gif"
 	},
 	"/elppa": {
 		"typeSend": "sendDocument",
-		"response": "https://giphy.com/gifs/apple-2c-GD2e9EJ0uDrzO"
+		"response": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWN3cHZ3OGppYnJ3a3JwanQ3ZXluMHNsYnhleXBxY2d0aXltamJ1eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/GD2e9EJ0uDrzO/giphy.gif"
 	},
 	"/patxaran": {
 		"typeSend": "sendDocument",
-		"response": "https://giphy.com/gifs/funny-horror-creepy-KzGCAlMiK6hQQ",
-		"oldResponse": "https://media1.tenor.com/images/4656f258352e28f023d7109c3135c90f/tenor.gif?itemid=11817205"
+		"response": "https://media1.tenor.com/images/4656f258352e28f023d7109c3135c90f/tenor.gif?itemid=11817205"
 	},
 	"/bye2":{
 		"typeSend": "sendDocument",
 		"response": "https://media.giphy.com/media/ZBVhKIDgts1eHYdT7u/giphy.gif"
 	},
-	"/lodije":		{
+	"/buenosdias": {
+		"typeSend": "sendDocument",
+		"response": "https://media.giphy.com/media/dTqNu3MdRkZ1Usz7Dz/giphy.gif"
+	},
+	"/quetefollen": {
+		"typeSend": "sendDocument",
+		"response": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGYyMnRsMDR4aDUyaGM2NnJkNHBqbmNhb2drYTA2dXFyNWUyMmV0YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/KzGCAlMiK6hQQ/giphy.gif"
+	},
+	"/lodije":	{
 		"typeSend": "sendDocument",
 		"response": "http://i.giphy.com/13IC4LVeP5NGNi.gif"
 	},
-	"/zasca":		{
+	"/zasca":	{
 		"typeSend": "sendDocument",
 		"response": "https://media.giphy.com/media/JrMgGbXmucW6ccgave/giphy.gif"
 	},
@@ -71,7 +89,7 @@
 	},
 	"/palmeros":	{
 		"typeSend": "sendDocument",
-		"response": "https://giphy.com/gifs/late-motiv-de-andreu-buenafuente-l0HlO02MbQb1wQ8N2"
+		"response": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdm9sa3I4ZnNidmIxeHQzcHl2djZma2h0M3gwOGl6OHVlMnhyMjhpMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0HlO02MbQb1wQ8N2/giphy.gif"
 	},
 	"/blablabla":	{
 		"typeSend": "sendDocument",
@@ -111,7 +129,7 @@
 	},
 	"/centrate":	{
 		"typeSend": "sendDocument",
-		"response": "https://giphy.com/gifs/castle-bath-bomb-VV1KEhb9UQCGY"
+		"response": "https://media.giphy.com/media/14afmHqKZ3ctsk/giphy.gif"
 	},
 	"/amen":		{
 		"typeSend": "sendDocument",
@@ -152,5 +170,13 @@
 	"/telodije":	{
 		"typeSend": "sendDocument",
 		"response": "https://media.giphy.com/media/F6V2W4hmDclqO9uQhe/giphy.gif"
+	},
+	"/shit":	{
+		"typeSend": "sendDocument",
+		"response": "https://media.giphy.com/media/hwdr7pvte2yVW/giphy.gif"
+	},
+	"/matamecamion":	{
+		"typeSend": "sendDocument",
+		"response": "https://media.giphy.com/media/jwKC0qlOoXmcLDB4vC/giphy.gif"
 	}
 }
